@@ -1,0 +1,25 @@
+{% extends "polls/non-auth-base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+	
+<div class="container page-content-body">
+	<legend>Account Activation</legend>
+	
+	{% if user_profile %}
+		{% if status %} 
+			{{msg|display_success}}
+		{% else %}
+			{{msg|display_info}}
+		{% endif %}
+	{% else %}
+		{{msg|display_error}}
+	{% endif %}
+</div>
+	
+
+{% endblock %}
+

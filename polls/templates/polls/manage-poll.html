@@ -1,0 +1,106 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<div class="container page-content-body">
+	<legend>{{poll.name}}</legend>
+	<form method="POST" action=".">
+		{% csrf_token %}
+		<div class = "col-md-6 manage-form poll-form">
+			{% for field in poll_form %}
+				{% bootstrap_label field.label %}
+				{% if field.help_text %}
+        			<span class="glyphicon glyphicon-question-sign glpyhicon-input-help" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="{{field|render_help_text}}"></span>
+        		{% endif %}
+        		{% bootstrap_field field show_label=False %}
+			{% endfor %}
+		</div>
+		<div class="clearfix"></div>
+		<legend><h4>Questions</h4></legend>
+		<div class="col-md-12">
+			{% for question in question_queryset %}
+				<div class="col-md-10 manage-poll-question-panel">
+					<div class="panel panel-primary">
+					  <div class="panel-heading">
+						<h3 class="panel-title">Question {{ question.order|add:"1" }}</h3>
+					  </div>
+					  <div class="panel-body">
+						<div class="col-md-8">
+							{{ question.question}}
+						</div>
+						<div class="col-md-4 btn-toolbar" role="toolbar">
+						{% if can_edit %}
+							<div class="btn-group pull-right">
+								<a href="{% url 'remove-question' poll.pk question.pk%}" onclick="return confirm('You are going to delete this question. Are you completely sure?');">
+								<button type="button" class=" poll-action-btn btn btn-primary btn-sm">
+									<span class="glyphicon glyphicon-trash"></span>
+									Remove
+								</button>
+								</a>
+							</div>
+						{% endif %}
+						<div class="btn-group pull-right">
+							<a href="{% url 'manage-question' poll.pk question.pk%}">
+								<button type="button" class="btn btn-primary btn-sm pull-right poll-action-btn">
+									{% if can_edit %}
+										<span class="glyphicon glyphicon-pencil"></span>
+										Edit
+									{% else %}
+										<span class="glyphicon glyphicon-eye-open"></span>
+										See details
+									{% endif %}
+								</button>
+							</a>
+						</div>
+						</div>
+					  </div>
+					</div>
+				</div>
+				<div class="col-md-1 question-order-panel">
+					<!-- <a href="{% url 'decrease-question-order' poll.pk question.pk %}"> -->
+					<button type="button" class="btn btn-primary decrease-order" for="{{poll.pk}}_{{question.pk}}">
+						<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+					</button>
+					<!-- </a> -->
+					<!-- <a href="{% url 'increase-question-order' poll.pk question.pk %}"> -->
+					<button type="button" class="btn btn-primary increase-order" for="{{poll.pk}}_{{question.pk}}">
+						<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+					</button>
+					<!-- </a> -->
+				</div>
+			{% endfor %}
+
+			{% if can_edit %}
+				<div class="col-md-3">
+					<a href="{% url 'add-question' poll.pk%}">
+						<button type="button" class="btn btn-primary btn-lg btn-block">
+							<span class="glyphicon glyphicon-plus"></span>
+							Add question
+						</button>
+					</a>
+				</div>
+			{% endif %}
+
+		</div>
+		<div class="clearfix"></div>
+		<legend>&nbsp;</legend>
+		<a href="{% url 'my-polls' %}"><button class="btn btn-primary btn-lg" type="button">Back</button></a>
+		{% if can_edit %}
+			<input class="btn btn-primary btn-lg" name="submit" value="Save" type="submit" />
+		{% endif %}
+	</form>
+</div>
+
+
+{% endblock %}
+
+{% block javascript %}
+	<!-- Importar Fichero Javascript -->
+	{% if js_file %}
+		<script type="text/javascript" src={% static "js/templates/" %}{{js_file}}></script>
+	{% endif %}
+{% endblock %}

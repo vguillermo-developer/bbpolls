@@ -1,0 +1,247 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<div class="container page-content-body">
+	<legend>{{poll.name}} > Question {{question_index}}</legend>
+	<form method="POST" action=".">
+		{% csrf_token %}
+		<div class = "col-md-12 manage-form">
+			{% for question_field in question_form %}
+
+				{% if forloop.counter == 3 %}
+					<div class="clearfix"></div>
+					<legend>Multimedia Content</legend>
+
+					{% if create_question %}
+						<p>If you want to add some multimedia sources to this question, you must do it through the question's "Edit" menu, once the question is created.</p>
+					{% else %}
+						<div class="col-md-6 question-field-container">
+		            		{% bootstrap_label question_field.label %}
+		            		{% if question_field.help_text %}
+		            			<span class="glyphicon glyphicon-question-sign glpyhicon-input-help" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="{{question_field|render_help_text}}"></span>
+		            		{% endif %}
+
+		            		{% bootstrap_field question_field show_label=False %}
+						</div>
+						<div class="col-md-6 multimedia-content-info image-info">
+							<div class="alert {{image_class}}" role="alert">
+								{{image_message}}
+							</div>
+						</div>
+						<div class="col-md-6 multimedia-content-info audio-info">
+							<div class="alert {{audio_class}}" role="alert">
+								{{audio_message}}
+							</div>
+						</div>
+						<div class="col-md-6 multimedia-content-info video-info">
+							<div class="alert {{video_class}}" role="alert">
+								{{video_message}}
+							</div>
+						</div>
+						<div class="col-md-6 multimedia-content-info iframe-info">
+							<div class="alert {{iframe_class}}" role="alert">
+								{{iframe_message}}
+							</div>
+						</div>
+						<div class="col-md-6 multimedia-content-info none-info">
+							<div class="alert alert-info" role="alert">
+								You have selected no multimedia content. The multimedia object will not show in the question unless you select a multimedia type to show.
+							</div>
+						</div>
+
+						{% if can_edit %}
+							<div class="col-md-12">
+								<a href="{% url 'add-mm-src-url' poll.pk question_pk %}">
+									<button type="button" class="btn btn-primary">
+										<span class="glyphicon glyphicon-plus"></span>
+										New source from URL
+									</button>
+								</a>
+								<!-- <a href="">
+									<button type="button" class="btn btn-primary">
+										<span class="glyphicon glyphicon-plus"></span>
+										New source from File
+									</button>
+								</a> -->
+							</div>
+						{% endif %}
+						<div class="col-md-12">
+							<table class="table table-mm-src">
+								<tr class="active">
+									<th rowspan="2">Name</th>
+									<th rowspan="2">Source</th>
+									<th rowspan="2">Type</th>
+									<th colspan="5">Supported Browsers</th>
+								</tr>
+								<tr class="active">
+									<th><img src={% static "img/ie_icon.png" %} title="Internet Explorer" alt="Internet Explorer"></th>
+									<th><img src={% static "img/firefox_icon.png" %} title="Mozilla Firefox" alt="Mozilla Firefox"></th>
+									<th><img src={% static "img/chrome_icon.png" %} title="Google Chrome" alt="Google Chrome"></th>
+									<th><img src={% static "img/safari_icon.png" %} title="Safari" alt="Safari"></th>
+									<th><img src={% static "img/opera_icon.png" %} title="Opera" alt="Opera"></th>
+								</tr>
+							{% if not multimedia_sources.exists %}
+								<tr><td colspan="8">No sources available yet.</td><tr>
+							{% else %}
+								{% for source in multimedia_sources %}
+									<tr class="row-{{source.media_type|lower}}-src">
+										<td>
+											<a href="{{source.get_source}}" target="_blank">
+												{{source.name}}
+											</a>
+										</td>
+										<td>
+											{{source.source_type}}
+										</td>
+										<td>
+											{{source.mime_type}}
+										</td>
+										{% if source.ie_supported %}
+											<td class="success">
+												<span class="glyphicon glyphicon-ok"></span>
+											</td>
+										{% else %}
+											<td class="danger">
+												<span class="glyphicon glyphicon-remove"></span>
+											</td>
+										{% endif %}
+
+										{% if source.chrome_supported %}
+											<td class="success">
+												<span class="glyphicon glyphicon-ok"></span>
+											</td>
+										{% else %}
+											<td class="danger">
+												<span class="glyphicon glyphicon-remove"></span>
+											</td>
+										{% endif %}
+
+										{% if source.firefox_supported %}
+											<td class="success">
+												<span class="glyphicon glyphicon-ok"></span>
+											</td>
+										{% else %}
+											<td class="danger">
+												<span class="glyphicon glyphicon-remove"></span>
+											</td>
+										{% endif %}
+
+										{% if source.safari_supported %}
+											<td class="success">
+												<span class="glyphicon glyphicon-ok"></span>
+											</td>
+										{% else %}
+											<td class="danger">
+												<span class="glyphicon glyphicon-remove"></span>
+											</td>
+										{% endif %}
+
+										{% if source.opera_supported %}
+											<td class="success">
+												<span class="glyphicon glyphicon-ok"></span>
+											</td>
+										{% else %}
+											<td class="danger">
+												<span class="glyphicon glyphicon-remove"></span>
+											</td>
+										{% endif %}
+										<td>
+										<a href="{% url 'remove-mm-src' poll.pk question_pk source.pk %}" onclick="return confirm('You are about to remove the source: {{source.name}}. Are you completly sure?')">
+											<button class="btn btn-primary btn-sm" alt="Remove" title="Remove" type="button">
+												<span class="glyphicon glyphicon-trash"></span>
+											</button>
+										</a>
+										</td>
+									</tr>
+								{% endfor %}
+							{% endif %}
+							</table>
+						</div>
+					{% endif %}
+				{% else %}
+					<div class="col-md-6 question-field-container">
+
+	            		{% bootstrap_label question_field.label %}
+	            		{% if question_field.help_text %}
+	            			<span class="glyphicon glyphicon-question-sign glpyhicon-input-help" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="{{question_field|render_help_text}}"></span>
+	            		{% endif %}
+
+	            		{% bootstrap_field question_field show_label=False %}
+
+					</div>
+				{% endif %}
+				<div class="clearfix"></div>
+			{% endfor %}
+		</div>
+
+
+		<div class="clearfix"></div>
+		<legend>Choices</legend>
+		<div class="col-md-12">
+			{{choice_formset.management_form}}
+			{% for choice in choice_formset %}
+			<div class="col-md-11 manage-question-choice-panel {{manage_only}}">
+				<div class="panel panel-primary">
+				  <div class="panel-heading">
+					<h3 class="panel-title">Choice {{ forloop.counter }}</h3>
+				  </div>
+				  <div class="panel-body">
+			  		{% for choice_field in choice.visible_fields %}
+								<div class="choice-field-container">
+									{# bootstrap_label choice_field.label_tag #}
+
+			            		{% if choice_field.help_text %}
+			            			<span class="glyphicon glyphicon-question-sign glpyhicon-inline-input-help" aria-hidden="true" data-toggle="tooltip" data-placement="right"  data-container=".choice-field-container" title="{{choice_field|render_help_text}}"></span>
+			            		{% endif %}
+
+			            		{% bootstrap_field choice_field show_label=False %}
+								</div>
+						  {% endfor %}
+							{% for choice_field in choice.hidden_fields %}
+									{% bootstrap_field choice_field show_label=False %}
+						  {% endfor %}
+				  </div>
+				</div>
+			</div>
+			{% endfor %}
+			<div class="clearfix"></div>
+			<div class="control-group">
+				<div class="input-group col-md-2">
+				  <input type="number" min="0" class="form-control" name="number-choices" placeholder="Add Choices #" style="text-align:right">
+				  <span class="input-group-btn">
+					<button class="btn btn-primary" name="submit" type="submit" value="add-choices">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				  </span>
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<legend>&nbsp;</legend>
+		<a href="{% url 'manage-poll' poll.pk %}"><button class="btn btn-primary btn-lg" type="button">Back</button></a>
+
+		{% if can_edit %}
+			<input class="btn btn-primary btn-lg" name="submit" value="Save" type="submit" />
+		{% endif %}
+
+		{% if create_question %}
+			<input class="btn btn-primary btn-lg" name="submit" value="Save" type="submit" />
+			<input class="btn btn-primary btn-lg" name="submit" value="Save and add new" type="submit" />
+		{% endif %}
+
+	</form>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+	<!-- Importar Fichero Javascript -->
+	{% if js_file %}
+		<script type="text/javascript" src={% static "js/templates/" %}{{js_file}}></script>
+	{% endif %}
+{% endblock %}

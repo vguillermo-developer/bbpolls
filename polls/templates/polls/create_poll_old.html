@@ -1,0 +1,76 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+
+{% block content %}
+	<div class="index-form">
+	<form method="POST" action="/polls/submit_poll/" class="form-inline">
+		{% csrf_token %}
+		<fieldset>
+		<div class="row form-control">
+			<div class="col-lg-12">
+			<legend>New Poll</legend>
+			{% bootstrap_form poll_form %}
+			</div>
+		</div>
+		{{ question_formset.manage_form }}
+		<div class="dynamic-question-form row">
+			<input type="button" class="add-question" value="Add question">
+			{% for question in question_formset.forms %}		
+				<div class="row form-model question-form">
+					<legend style="margin-top: 10px; margin-left: 0px;" class="legend">Question {{ forloop.counter }}</legend>
+					<input type="button" class="delete-question" style="float:right;margin-top:-60px;margin-right:15px;" value="X">
+					<div class="col-lg-6">
+						<label>Question</label>
+						{{ question }}
+						<input type="button" class="add-choice" value="Add choice"/>
+					</div>
+					<div class="col-lg-6">
+						{% if question.nested %}
+						<div class="dynamic-choice-form row form-model">
+						<legend style="margin-top: 20px;">Choices</legend>							
+							{% for formset in question.nested %}
+								{% for choice in formset.forms %}
+									<div class="col-lg-6 choice-form">
+										<label class="legend">Choice {{forloop.counter}} </label>
+										{{ choice }}
+										<input type="button" class="delete-choice" style="display:inline;" value="X"/>
+									</div>
+								{% endfor %}
+							{% endfor %}
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<input type="submit" value="Aceptar">
+				<input type="button" onclick="history.back(-1)" value="Cancelar">
+			</div>
+		</div>
+	</fieldset>
+	</form>
+	</div>
+	</div> <!-- row -->
+</div><!-- content -->
+
+<script type="text/javascript">
+	set_functions()
+</script>
+
+<!--script type="text/javascript">
+   $(function() {
+	   $('.question-form').formset({
+		   formCssClass: 'questoin-form'
+	   });
+	   $('.choice-form').formset({
+		   formCssClass: 'choice-form'
+	   });
+   })
+</script-->
+
+{% endblock %}
+

@@ -1,0 +1,55 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+	<div id="accordion" class="container page-content-body">
+		<div class="panel remove-panel-style">
+			<legend id="label_create">
+				<a data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="create_poll" href="#create_poll" >
+					New Poll
+				</a>
+			</legend>
+			<div id="create_poll" class="col-md-6 manage-form poll-form collapse" aria-labelledby="label_create">
+				<form method="POST" action=".">
+					{% csrf_token %}
+
+					{% for field in create_form %}
+						{% bootstrap_label field.label %}
+						{% if field.help_text %}
+	            			<span class="glyphicon glyphicon-question-sign glpyhicon-input-help" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="{{field|render_help_text}}"></span>
+	          {% endif %}
+        		{% bootstrap_field field show_label=False %}
+					{% endfor %}
+
+					<div class="control-group">
+						<a href="{% url 'my-polls' %}"><button class="btn btn-primary btn-lg" type="button">Back</button></a>
+						<input class="btn btn-primary btn-lg" value="Create" type="submit" name="create" />
+					</div>
+				</form>
+			</div>
+
+			<legend id="label_import">
+				<a data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="import_poll" href="#import_poll" >
+					Import Poll
+				</a>
+			</legend>
+			<div id="import_poll" class="col-md-6 manage-form poll-form collapse" aria-labelledby="label_import" >
+				<form method="POST" action="." enctype="multipart/form-data">
+					{% csrf_token %}
+					{% bootstrap_form import_form %}
+
+					<div class="control-group">
+						<a href="{% url 'my-polls' %}"><button class="btn btn-primary btn-lg" type="button">Back</button></a>
+						<input class="btn btn-primary btn-lg" value="Import" type="submit"  name="import" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<div class="container page-content-body">
+<div class="clearfix"></div>
+<legend>Available Polls</legend>
+{% if not available_polls %}
+	<p>There are no polls available for you right now.</p>
+{% else %}
+	<table id="table_available_polls" class="table table-striped table-polls">
+		<tr>
+			<th>#</th>
+			<th>Name</th>
+			<th>Publish date</th>
+			<th>Question count</th>
+			<th>Actions</th>
+		</tr>
+	{% for p in available_polls %}
+		<tr>
+			<td>{{ forloop.counter }}</td>
+			<td>{{ p.name }}</td>
+			<td>{{ p.publish_date|date:'d/m/Y H:i' }}</td>
+			<td>{{ p.number_questions }}</td>
+			<td>
+				<div class="btn-toolbar" role="toolbar" style="margin: 0;">
+					<div class="btn-group">
+						<a href="{% url 'do-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+							<span class="glyphicon glyphicon-flash"></span>
+							Start
+						</a>
+					</div>
+				</div>
+			</td>
+		</tr>
+	{% endfor %}
+	</table>
+	{% if available_polls.count > 10 %}
+		<div class="col-md-12 toggle-show-div"><a class="btn-toggle-show" for="table_available_polls">Show More</a></div>
+	{% endif %}
+{% endif %}
+
+<div class="clearfix"></div>
+<legend>Completed Polls</legend>
+{% if not completed_polls %}
+	<p>You have not completed any polls yet.</p>
+{% else %}
+	<table id="table_completed_polls" class="table table-striped table-polls">
+		<tr>
+			<th>#</th>
+			<th>Name</th>
+			<th>Completed on</th>
+			<th>Actions</th>
+		</tr>
+	{% for response in completed_polls	 %}
+		<tr>
+			<td>{{ forloop.counter }}</td>
+			<td>{{ response.poll.name }}</td>
+			<td>{{ response.poll.created|date:'d/m/Y H:i' }}</td>
+			<td>
+				<div class="btn-toolbar" role="toolbar" style="margin: 0;">
+					<div class="btn-group">
+						<a href="{% url 'review-poll' response.poll.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+							<span class="glyphicon glyphicon-eye-open"></span>
+							Review
+						</a>
+					</div>
+				</div>
+			</td>
+		</tr>
+	{% endfor %}
+	</table>
+	{% if completed_polls.count > 10 %}
+		<div class="col-md-12 toggle-show-div"><a class="btn-toggle-show" for="table_completed_polls">Show More</a></div>
+	{% endif %}
+{% endif %}
+
+{% if ongoing_polls %}
+	<div class="clearfix"></div>
+	<legend>Ongoing Polls</legend>
+	<table id="table_ongoing_polls" class="table table-striped table-polls">
+		<tr>
+			<th>#</th>
+			<th>Name</th>
+			<th>Question count</th>
+			<th>Actions</th>
+		</tr>
+	{% for response in ongoing_polls %}
+		<tr>
+			<td>{{ forloop.counter }}</td>
+			<td>{{ response.poll.name }}</td>
+			<td>{{ response.poll.number_questions }}</td>
+			<td>
+				<div class="btn-toolbar" role="toolbar" style="margin: 0;">
+					<div class="btn-group">
+						<a href="{% url 'do-poll' response.poll.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+							<span class="glyphicon glyphicon-flash"></span>
+							Continue
+						</a>
+					</div>
+					<div class="btn-group">
+						<a href="{% url 'remove-response' response.poll.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+							<span class="glyphicon glyphicon-trash"></span>
+							Remove
+						</a>
+					</div>
+				</div>
+			</td>
+		</tr>
+	{% endfor %}
+	</table>
+	{% if ongoing_polls.count > 10 %}
+		<div class="col-md-12 toggle-show-div"><a class="btn-toggle-show" for="table_ongoing_polls">Show More</a></div>
+	{% endif %}
+{% endif %}
+
+</div>
+
+
+{% endblock %}
+
+{% block javascript %}
+	<!-- Importar Fichero Javascript -->
+	{% if js_file %}
+		<script type="text/javascript" src={% static "js/templates/" %}{{js_file}}></script>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "polls/non-auth-base.html" %}
+
+{% load bootstrap3 %}
+{% load custom_filters %}
+
+{% block content %}
+<!-- Modal -->
+<div id="registerForm" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="registerFormLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="btn btn-primary btn-sm pull-right" data-dismiss="modal" aria-hidden="true">
+				<span class="glyphicon glyphicon-remove"></span>
+			</button>
+			<h3 id="registerFormLabel">Register</h3>
+		</div>
+		<form class="form-signin" action="." method="POST">
+			{% csrf_token %}
+			<div class="modal-body">
+				{% bootstrap_form reg_form %}
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary btn-lg" data-dismiss="modal" aria-hidden="true">Close</button>
+				<input type="hidden" name="wichform" value="registration">
+				<button class="btn btn-primary btn-lg" type="submit">Complete registration</button>
+			</div>
+		</form>
+	</div>
+  </div>
+</div>
+<!-- /Modal -->
+
+<div class="container login-content">
+	<div class="col-md-6 col-md-offset-3">
+	  <form class="form-signin" action="." method="POST">
+		{% csrf_token %}
+		{{success_msg|display_success}}
+		{{info_msg|display_info}}
+		{{error_msg|display_error}}
+		<h2 class="form-signin-heading">Please sign in</h2>
+		{% bootstrap_form login_form %}
+		<!--label class="checkbox">
+			<input type="checkbox" value="remember-me"> Remember me
+		</label-->
+		<input type="hidden" name="wichform" value="login">
+		<div class="control-group">
+			<a class="btn btn-lg btn-primary" href="{% url 'contact' %}">Forgot password?</a>
+			<button class="btn btn-primary btn-lg" type="submit">Sign in</button>
+		</div>
+	  </form>
+	  <button type="button" class="btn btn-primary btn-lg btn-block" onclick="$('#registerForm').modal('show')">Register</button>
+
+	</div>
+</div>
+
+{% endblock %}

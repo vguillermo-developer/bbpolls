@@ -1,0 +1,172 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+
+
+{% block extra_head %}
+	<link type="text/css" rel="stylesheet" href={% static "css/templates/view_stats.css" %} media="all"/>
+{% endblock %}
+
+{% block content %}
+	<div class="container poll-stats">
+		<legend><h2>{{ poll.name }}</h2></legend>
+		
+		<div class="col-md-12">
+			<div class="col-md-2">
+				<label class="pull-right">Times answered:</label>
+			</div>
+			<div class="col-md-8">
+				<p class="pull-left">{{poll.votes}}</p>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-2">
+				<label class="pull-right">Created on:</label>
+			</div>
+			<div class="col-md-8">
+				<p class="pull-left">{{poll.created|date:'d/m/Y H:i'}}</p>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-2">
+				<label class="pull-right">Last answered:</label>
+			</div>
+			<div class="col-md-8">
+				<p class="pull-left">{{poll.last_modified|date:'d/m/Y H:i'}}</p>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-2">
+				<label class="pull-right">Access Type:</label>
+			</div>
+			<div class="col-md-8">
+				<p class="pull-left">{{poll.access_type}}</p>
+			</div>
+		</div>
+		<div class="col-md-offset-9 col-md-3">
+			<a href="{% url 'get-csv-stats' poll.pk %}">
+				<button class="btn btn-primary">
+					<span class="glyphicon glyphicon-save"></span>
+					CSV&nbsp;&nbsp;&nbsp;Download statistics
+				</button>
+			</a>
+		</div>
+
+		
+		
+	</div>
+
+	<div id="parallel_coordinates" class="container parcoords"></div>
+
+	{% for question in questions %}
+		<div class="container question-stats">
+			<legend><h4>Question {{ forloop.counter }}</h4></legend>
+			<p>{{question.question}}</p>
+			<div class="col-md-12 choices-stats">
+				{% if question.allows_multiple_answer %}
+					<div class="col-md-12">
+						<p><i>Note: This question allows multiple choice selection. That means the response percentage of each and every choices can reach 100%</i></p>
+					</div>
+				{% endif %}
+				<div class="col-md-2 choices-axis">
+				{% for choice in choices|from_question:question %}
+					<div class="col-md-12 choice-axis-value">
+						<label class="pull-right">Choice {{forloop.counter}}</label>
+					</div>
+				{% endfor %}
+				</div>
+				<div class="col-md-10 choices-graph">
+				{% for choice in choices|from_question:question %}
+					<div class="col-md-8" data-toggle="tooltip" data-placement="right" title="{{choice.choice}}">
+						<div class="choice-graph-bar pull-left" style="width:{{choice.response_percentage}}%;">
+							<div class="choice-graph-value pull-right">
+								{{choice.response_percentage}}%
+							</div>
+						</div>
+					</div>
+					{% if not choice.is_fixed %}
+						<!-- Verbatims Modal -->
+						<div id="verbatims_{{choice.pk}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="verbatims_{{choice.pk}}_label" aria-hidden="true">
+						  <div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="btn btn-primary btn-sm pull-right" data-dismiss="modal" aria-hidden="true">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+									<h3 id="verbatims_{{choice.pk}}_label">Verbatims</h3>
+								</div>
+								<div class="modal-body">
+									<div class="col-md-12">
+										{% for v in verbatims|get_verbatims_from_choice:choice %}
+											<div class="panel panel-info view-verbatim-panel">
+												<div class="panel-heading">
+													<h4 class="panel-title">{{ v.title }}</h4>
+											  	</div>
+												<div class="panel-body">
+													{{v}}
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						  </div>
+						</div>
+						<!-- /Verbatims Modal -->
+						<button class="btn btn-primary btn-sm pull-left" onclick="$('#verbatims_{{choice.pk}}').modal('show')">
+							<span class="glyphicon glyphicon-eye-open"></span>
+							&nbsp;View verbatims
+						</button>
+					{% endif %}
+				{% endfor %}
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}
+
+{% block javascript %}
+	
+	<script type="text/javascript" src={% static "js/d3/d3.min.js" %}></script>
+	<!--<script type="text/javascript" src={% static "js/d3/d3.parcoords.js" %}></script> -->
+
+	<script type="text/javascript">
+		var csv_path= "{% url 'get-csv-stats-pc' poll.pk %}";
+
+		var dimensions = [
+			{% for question in questions %}
+				{ 
+					name: "Question {{question.order}}",
+					type: String,
+					scale: d3.scale.ordinal().rangePoints([0, 300]).domain([
+						{% for choice in choices|from_question:question %}
+							"Choice {{choice.order}}",
+						{% endfor %}
+					])
+				},
+			{% endfor %}
+		]
+	</script>
+	<script type="text/javascript" src={% static "js/templates/view_stats.js" %}></script>
+
+	<!-- Importar Fichero Javascript -->
+	<!-- <script type="text/javascript" src={% static "js/d3/d3.min.js" %}></script>
+	<script type="text/javascript" src={% static "js/d3/parallel-coordinates-chart.min.js" %}></script>
+	<script type="text/javascript">
+		// Create chart draw function
+		var chart = parallelCoordinatesChart()
+
+		// Draw the chart after loading external data
+		d3.csv("{% url 'get-csv-stats' poll.pk %}", function(err, data){
+		  d3.select("#parallel_coordinates").datum(data).call(chart);
+		});
+	</script> -->
+
+{% endblock %}
+

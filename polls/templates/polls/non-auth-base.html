@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+{% load bootstrap3 %}
+{% load static %}s
+
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8"/>
+
+	{# Display django.contrib.messages as Bootstrap alerts #}
+	{% bootstrap_messages %}
+
+	<!-- Librerias CSS -->
+	{% bootstrap_css %}
+	<link rel="stylesheet" href={% static "css/styles.css" %} type="text/css">
+
+	{% block extra_head %}{% endblock %}
+</head>
+
+<body>
+	<div class="page-header">
+	  <div class="container header-title">
+		<h1>Blue Brain Polls</h1>
+	  </div>
+	  <div class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="{{login_active}}"><a href="/polls/login/">Login</a></li>
+            <li class="{{about_active}}"><a href="/polls/login/about/">About</a></li>
+            <li class="{{contact_active}}"><a href="/polls/login/contact/">Contact</a></li>
+		  </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+	  </div>
+	  </div>
+
+    {% bootstrap_messages %}
+
+    {% block content %}Empty page{% endblock %}
+
+	<div class="footer">
+		<div class="container">
+			<div class="col-md-6 author-credits">
+				<div class="col-md-6">
+					<a href="http://cajalbbp.cesvima.upm.es/" target="_blank">
+						<img src={% static "img/cajalbbp.png" %} alt="Cajal Blue Brain Project"/>
+					</a>
+					<a href="http://www.etsiinf.upm.es/" target="_blank">
+						<img src={% static "img/fiupm.png" %} alt="E.T.S.I. Inform&aacute;ticos" style="width:50px; clear:right;"/>
+					</a>
+					<a href="http://www.upm.es/" target="_blank">
+						<img src={% static "img/upm.png" %} alt="Universidad Polit&eacute;cnica de Madrid" style="width:58px; clear:none;"/>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-6 tech-credits">
+				<img src={% static "img/django-powered.jpg" %} alt="powered by Django"/>
+				<img src={% static "img/bootstrap-powered.png" %} alt="powered by Bootstrap"/>
+			</div>
+		</div>
+	</div>
+
+	<!-- Javascript -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src={% static "js/bootstrap.js" %}></script>
+	<script type="text/javascript" src={% static "js/bootstrap.min.js" %}></script>
+
+	<!-- Importar Fichero Javascript -->
+	{% if js_file %}
+		<script src={% static "js/templates/" %}{{js_file}} type="text/javascript"></script>
+	{% endif %}
+
+	<!-- Acciones Javascript -->
+	{% if js_actions %}
+		<script type="text/javascript">
+			{% autoescape off %}
+				{{js_actions}}
+			{% endautoescape %}
+		</script>
+	{% endif %}
+
+</body>
+</html>

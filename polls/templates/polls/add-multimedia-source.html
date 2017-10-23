@@ -1,0 +1,32 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<div class="container page-content-body">
+	<legend>{{poll.name}} > Question {{question_index}} > Add Multimedia Source from URL</legend>
+
+
+		<form method="POST" action=".">
+			{% csrf_token %}
+			<div class="col-md-3">
+				{% bootstrap_field multimedia_form.media_type %}
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-md-6">
+				{% bootstrap_field multimedia_form.url_source %}
+			</div>
+			<div class="clearfix"></div>
+			<div class="control-group">
+				<a href="{% url 'manage-question' poll.pk question.pk%}"><button class="btn btn-primary" type="button">Back</button></a>
+				<input class="btn btn-primary" name="submit" value="Save" type="submit" />
+			</div>
+		</form>
+
+</div>
+
+
+{% endblock %}

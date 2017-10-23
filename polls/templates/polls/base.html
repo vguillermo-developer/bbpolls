@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+{% load bootstrap3 %}
+{% load static %}
+
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8"/>
+
+	{# Display django.contrib.messages as Bootstrap alerts #}
+	{% bootstrap_messages %}
+
+	<!-- Librerias CSS -->
+	{% bootstrap_css %}
+	<link rel="stylesheet" href={% static "css/bootstrap.min.css" %} type="text/css" media="all">
+	<link rel="stylesheet" href={% static "css/bootstrap-theme.min.css" %} type="text/css" media="all">
+	<link rel="stylesheet" href={% static "css/styles.css" %} type="text/css" media="all">
+
+	{% block extra_head %}Empty page{% endblock %}
+</head>
+
+<body>
+	<div class="page-header">
+	  <div class="container header-title">
+		<h1>Blue Brain Polls</h1>
+	  </div>
+	  <div class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="{{home_active}}"><a href="/polls/home">Home</a></li>
+            {% if is_pollster %}
+				<li class="{{mypolls_active}}"><a href="/polls/my-polls/">My Polls</a></li>
+			{% endif %}
+            <li class="{{about_active}}"><a href="/polls/about/">About</a></li>
+            <li class="{{contact_active}}"><a href="/polls/contact/">Contact</a></li>
+		  </ul>
+		  <ul class="nav navbar-nav pull-right">
+			<li class="{{account_active}}">
+				<a href="/polls/account/">
+					<img src={% static "img/user.png" %} width="20" height="20"/>
+					&nbsp;<i>{{request.user.first_name}}</i>
+				</a>
+			</li>
+            <li><a class="btn-logout" href="/polls/logout/"><span class="glyphicon glyphicon-off"></span></a></li>
+		  </ul>
+
+        </div><!--/.nav-collapse -->
+      </div>
+	  </div>
+	  </div>
+
+    {% bootstrap_messages %}
+
+    {% block content %}Empty page{% endblock %}
+
+	<div class="footer">
+		<div class="container">
+			<div class="col-md-6 author-credits">
+				<div class="col-md-6">
+					<a href="http://cajalbbp.cesvima.upm.es/" target="_blank">
+						<img src={% static "img/cajalbbp.png" %} alt="Cajal Blue Brain Project"/>
+					</a>
+					<a href="http://www.etsiinf.upm.es/" target="_blank">
+						<img src={% static "img/fiupm.png" %} alt="E.T.S.I. Inform&aacute;ticos" style="width:50px; clear:right;"/>
+					</a>
+					<a href="http://www.upm.es/" target="_blank">
+						<img src={% static "img/upm.png" %} alt="Universidad Polit&eacute;cnica de Madrid" style="width:58px; clear:none;"/>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-6 tech-credits">
+				<img src={% static "img/django-powered.jpg" %} alt="powered by Django"/>
+				<img src={% static "img/bootstrap-powered.png" %} alt="powered by Bootstrap"/>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Librerias Javascript -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src={% static "js/bootstrap.js" %}></script>
+	<script type="text/javascript" src={% static "js/bootstrap.min.js" %}></script>
+	<script type="text/javascript" src={% static "js/bootstrap-notify.min.js" %}></script>
+	<script type="text/javascript" src={% static "js/templates/base.js" %}></script>
+
+	{% block javascript %}Empty page{% endblock %}
+
+	<!-- Acciones Javascript -->
+	<script type="text/javascript">
+		{% autoescape off %}
+			{% if error_msg %}
+				setErrorMessage("{{error_msg}}")
+			{% endif %}
+
+			{% if warning_msg %}
+				setWarningMessage("{{warning_msg}}")
+			{% endif %}
+
+			{% if info_msg %}
+				setInfoMessage("{{info_msg}}")
+			{% endif %}
+
+			{% if success_msg %}
+				setSuccessMessage("{{success_msg}}")
+			{% endif %}
+
+			{% if js_actions %}
+				{{js_actions}}
+			{% endif %}
+		{% endautoescape %}
+	</script>
+
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!-- Modal -->
+		<div id="registerForm" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+			<h3 id="myModalLabel">Register</h3>
+		</div>
+		<form class="form-signin" action="." method="POST"> {% csrf_token %}
+			<div class="modal-body">
+				{% bootstrap_form reg_form %}				
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button class="btn btn-primary" type="submit">Complete registration</button>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript">$('#registerForm').modal('{{show_reg}}')</script>

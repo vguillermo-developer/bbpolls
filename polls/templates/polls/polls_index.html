@@ -1,0 +1,259 @@
+﻿{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+
+<div class="container page-content-body">
+	<div class="col-md-4 col-md-offset-4">
+		<a href="/polls/create-poll/">
+			<button type="button" class="btn btn-primary btn-lg btn-block">
+				<span class="glyphicon glyphicon-plus"></span>
+				&nbsp;Create poll
+			</button>
+		</a>
+	</div>
+	<div class="clearfix"></div>
+	<legend>Published Polls</legend>
+	{% if not published_polls %}
+		<p>You don't have any active polls right now.</p>
+	{% else %}
+		<table id="table_published_polls" class="table table-striped table-polls">
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<!--th>Question count</th-->
+				<th>Publish Date</th>
+				<th>Times Answered</th>
+				<th>Actions</th>
+			</tr>
+		{% for p in published_polls %}
+			<tr>
+				<td>{{ forloop.counter }}</td>
+				<td>{{ p.name }}</td>
+				<!--td>{{ p.number_questions }}</td-->
+				<td>{{ p.publish_date|date:'d/m/Y H:i' }}</td>
+				<td>{{ p.times_answered }}</td>
+				<td>
+					<div class="btn-toolbar" role="toolbar" style="margin: 0;">
+						<div class="btn-group">
+							<a href="{% url 'unpublish-poll' p.pk %}" class="poll-action-btn btn btn-warning btn-sm">
+								<span class="glyphicon glyphicon-pause"></span>
+								Unpublish
+							</a>
+							<a href="{% url 'archive-poll' p.pk %}" class="poll-action-btn btn btn-danger btn-sm"
+								onclick="return confirm('You are going to archive poll: {{p.name}}. This operation cannot be undone. Are you sure?');">
+								<span class="glyphicon glyphicon-stop"></span>
+								Archive
+							</a>
+						</div>
+
+						<div class="btn-group">
+							<a class="poll-action-btn btn btn-primary btn-sm invite-poll" for="{{ p.pk }}">
+								<span class="glyphicon glyphicon-send"></span>
+								Send
+							</a>
+						</div>
+
+						<div class="btn-group">
+							<a href="{% url 'try-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-eye-open"></span>
+								Preview
+							</a>
+							<a href="{% url 'manage-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-cog"></span>
+								See settings
+							</a>
+						</div>
+
+						<div class="btn-group">
+							<a href="{% url 'clone-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-duplicate"></span>
+								Clone
+							</a>
+							<a href="{% url 'export-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-export"></span>
+								Export
+							</a>
+						</div>
+						<div class="btn-group">
+							<a href="{% url 'view-stats' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-stats"></span>
+								View Stats
+							</a>
+						</div>
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+		{% if published_polls.count > 10 %}
+			<div class="col-md-12 toggle-show-div"><a class="btn-toggle-show" for="table_published_polls">Show More</a></div>
+		{% endif %}
+
+	{% endif %}
+
+	<div class="clearfix"></div>
+	<legend>Draft Polls</legend>
+	{% if not draft_polls %}
+	<p>You have not any inactive polls right now.</p>
+	{% else %}
+		<table id="table_draft_polls" class="table table-striped table-polls">
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Last Modified</th>
+				<th># of questions</th>
+				<th>Actions</th>
+			</tr>
+		{% for p in draft_polls %}
+			<tr>
+				<td>{{ forloop.counter }}</td>
+				<td>{{ p.name }}</td>
+				<td>{{ p.last_modified|date:'d/m/Y H:i' }}</td>
+				<td>{{ p.number_questions }}</td>
+				<td>
+					<div class="btn-toolbar" role="toolbar" style="margin: 0;">
+						<div class="btn-group">
+							<a href="{% url 'publish-poll' p.pk %}" class="poll-action-btn btn btn-success btn-sm">
+								<span class="glyphicon glyphicon-play"></span>
+								Publish
+							</a>
+						</div>
+						<div class="btn-group">
+							<a href="{% url 'try-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-eye-open"></span>
+								Preview
+							</a>
+							<a href="{% url 'manage-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-cog"></span>
+								Settings
+							</a>
+						</div>
+						<div class="btn-group">
+							<a href="{% url 'clone-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-duplicate"></span>
+								Clone
+							</a>
+							<a target="_blank" href="{% url 'export-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-export"></span>
+								Export
+							</a>
+						</div>
+						<div class="btn-group">
+							<a href="{% url 'remove-poll' p.pk %}" class="poll-action-btn btn btn-danger btn-sm"
+								onclick="return confirm('You are going to delete poll: {{p.name}}. Are you completely sure?');">
+								<span class="glyphicon glyphicon-trash"></span>
+								Remove
+							</a>
+						</div>
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+		{% if draft_polls.count > 10 %}
+			<div class="col-md-12 toggle-show-div"><a class="btn-toggle-show" for="table_draft_polls">Show More</a></div>
+		{% endif %}
+
+	{% endif %}
+
+	<div class="clearfix"></div>
+	<legend>Archived Polls</legend>
+	{% if not archived_polls %}
+		<p>You have not any archived polls right now.</p>
+	{% else %}
+		<table id="table_archived_polls" class="table table-striped table-polls">
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<!--th>Question count</th-->
+				<th>Archive date</th>
+				<th>Times Answered</th>
+				<th>Actions</th>
+			</tr>
+		{% for p in archived_polls %}
+			<tr>
+				<td>{{ forloop.counter }}</td>
+				<td>{{ p.name }}</td>
+				<!--td>{{ p.number_questions }}</td-->
+				<td>{{ p.archive_date|date:'d/m/Y H:i' }}</td>
+				<td>{{ p.times_answered }}</td>
+				<td>
+					<div class="btn-toolbar" role="toolbar" style="margin: 0;">
+						<div class="btn-group">
+							<a href="{% url 'try-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-eye-open"></span>
+								Preview
+							</a>
+							<a href="{% url 'manage-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-cog"></span>
+								See settings
+							</a>
+						</div>
+						<div class="btn-group">
+							<a href="{% url 'clone-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-duplicate"></span>
+								Clone
+							</a>
+							<a href="{% url 'export-poll' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-export"></span>
+								Export
+							</a>
+						</div>
+						<div class="btn-group">
+							<a href="{% url 'view-stats' p.pk %}" class="poll-action-btn btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-stats"></span>
+								View Stats
+							</a>
+						</div>
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+		{% if archived_polls.count > 10 %}
+			<div class="col-md-12 toggle-show-div"><a class="btn-toggle-show" for="table_archived_polls">Show More</a></div>
+		{% endif %}
+
+	{% endif %}
+	<!-- SHOW OWNED POLLS -->
+</div>
+
+
+<!-- Modal Invite -->
+<div id="inviteForm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="inviteFormLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="btn btn-primary btn-sm pull-right" data-dismiss="modal" aria-hidden="true">
+				<span class="glyphicon glyphicon-remove"></span>
+			</button>
+			<h4 id="inviteFormLabel">Send Poll</h4>
+		</div>
+		<form class="send-poll-form" action="" method="POST">
+			{% csrf_token %}
+			<div class="modal-body">
+				{% bootstrap_form send_poll_form %}
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button class="btn btn-primary" type="submit">Send</button>
+			</div>
+		</form>
+	</div>
+  </div>
+</div>
+<!-- /Modal -->
+
+{% endblock %}
+
+{% block javascript %}
+	<!-- Importar Fichero Javascript -->
+	{% if js_file %}
+		<script type="text/javascript" src={% static "js/templates/" %}{{js_file}}></script>
+	{% endif %}
+{% endblock %}

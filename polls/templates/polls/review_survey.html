@@ -1,0 +1,104 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+
+<div class="container survey">
+	<legend><h1>{{ poll.name }}</h1></legend>
+		{% for question in questions %}
+			<div class="container survey-question">
+				<legend><h4>Question {{ forloop.counter }}</h4></legend>
+				<div class="col-md-6 col-md-offset-3 question-mmsrc">
+					{% if question.has_image %}
+						{% with question.image_sources|first as image %}
+							<img src="{{image.get_source}}"/>
+						{% endwith %}				
+					{% elif question.has_audio %}
+						<audio controls>
+							{% for src in question.audio_sources %}
+								<source src="{{src.get_source}}" type="{{src.mime_type}}">
+							{% endfor %}
+								Your browser does not support the audio element.
+						</audio>
+					{% elif question.has_video %}
+						<video controls>
+							{% for src in question.video_sources %}
+								<source src="{{src.get_source}}" type="{{src.mime_type}}">
+							{% endfor %}
+								Your browser does not support this video element.
+						</video>
+					{% elif question.has_iframe %}
+						{% with question.iframe_sources|first as iframe %}
+							<iframe src="{{iframe.get_source}}">
+								Your browser does not support this iframe element.
+							</iframe>
+						{% endwith %}
+					{% endif %}
+				</div>
+				
+				<div class="col-md-12">
+					<p>{{question.question}}</p>
+				</div>
+				<div class="col-md-12 survey-question-choices">
+					{% if not question.allows_multiple_answer %}
+						{% for choice in choices|from_question:question %}
+							{% if choice.is_fixed %}
+								<!-- UNIQUE ANSWER, FIXED CHOICE: choices are "radials", with <p> text -->
+								<div class="col-md-12">
+									<label>
+										<input type="radio" name="q{{question.pk}}_choice" value="{{choice.pk}}" {%if choice in response.choices.all%}checked{%endif%}  disabled/>
+										{{choice.choice}}
+									</label>
+								</div>
+							{% else %}
+								<!-- UNIQUE ANSWER, FREE CHOICE: choices are "radials", with text input -->
+								<div class="col-md-12">
+									<label>
+										<input type="radio" name="q{{question.pk}}_choice" value="{{choice.pk}}" {%if choice in response.choices.all%}checked{%endif%} disabled/>
+										{{choice.choice}}
+									</label>
+									<div class="clearfix"></div>
+									<div class="col-md-7">
+										<input type	="text" class="form-control" name="{{choice.pk}}_verbatim" maxlength="1000" value="{{choice|get_verbatim_from_response_choice:response}}" disabled/>
+									</div>
+								</div>
+							{% endif %}
+
+						{% endfor %}
+					{% else %}
+						{% for choice in choices|from_question:question %}
+							{% if choice.is_fixed %}
+								<!-- MULTIPLE ANSWER, FIXED CHOICE: choices are "checkbox", with <p> text -->
+								<div class="col-md-12">
+									<label>
+										<input type="checkbox" name="q{{question.pk}}_choice{{choice.pk}}" value="{{choice.pk}}" {%if choice in response.choices.all%}checked{%endif%} disabled />
+										{{choice.choice}}
+									</label>
+								</div>
+							{% else %}
+								<!-- MULTIPLE ANSWER, FREE CHOICE: choices are "checkbox", with text input -->
+								<div class="col-md-12">
+									<label>
+										<input type="checkbox" name="q{{question.pk}}_choice{{choice.pk}}" value="{{choice.pk}}" {%if choice in response.choices.all%}checked{%endif%} disabled />
+										{{choice.choice}}
+									</label>
+									<div class="clearfix"></div>
+									<div class="col-md-7">
+										<input type	="text" class="form-control" name="{{choice.pk}}_verbatim" maxlength="1000" value="{{choice|get_verbatim_from_response_choice:response}}"  disabled/>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</div>
+				
+			</div>
+		{% endfor %}
+		<a href="{% url 'home'%}"><button class="btn btn-primary btn-lg" type="button">Back</button></a>
+	</form>
+</div>
+
+{% endblock %}
+

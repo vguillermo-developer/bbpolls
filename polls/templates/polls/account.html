@@ -1,0 +1,46 @@
+{% extends "polls/base.html" %}
+
+{% load bootstrap3 %}
+{% load static %}
+
+{% block content %}
+
+<div class="container page-content-body">
+	<legend>Account Settings</legend>
+	{% if user_error != '' and user_error != None %}
+	<div class="alert alert-danger" role="alert">
+		<p>{{user_error}}</p>
+	</div>
+	{% endif %}
+
+	<form method="POST" action=".">
+		{% csrf_token %}
+		<div class="col-md-4">
+			{% bootstrap_form user_form %}
+
+			<div class="control-group">
+				<input class="btn btn-primary" name="submit" value="Save" type="submit" />
+			</div>
+		</div>
+	</form>
+	<div class="clearfix"></div>
+	<legend>Change Password</legend>
+	{% if password_error != '' and password_error != None %}
+		<div class="alert alert-danger" role="alert">
+			<p>{{password_error}}</p>
+		</div>
+	{% endif %}
+	<form method="POST" action=".">
+		{% csrf_token %}
+		<div class="col-md-4">
+			{% bootstrap_form password_form %}
+
+			<div class="control-group">
+				<input class="btn btn-primary" name="submit" value="Change Password" type="submit"/>
+			</div>
+		</div>
+	</form>
+
+</div>
+
+{% endblock %}
