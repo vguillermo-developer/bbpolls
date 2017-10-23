@@ -1,1 +1,5 @@
-# 2014 BBPolls
+2014 - Final Degree Project for Universidad Politécnica de Madrid
+
+
+
+# BBPolls
