@@ -146,8 +146,8 @@ MEDIA_ROOT = '../media/'
 
 #EMAIL SMTP CONFIG
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'cbbp.bbpolls@gmail.com'
-EMAIL_HOST_PASSWORD = ''
-DEFAULT_FROM_EMAIL = 'cbbp.bbpolls@gmail.com'
+EMAIL_HOST = '<email server host>' # for example smpt.google.com
+EMAIL_PORT = '<email server port>' # (for google) 587
+EMAIL_HOST_USER = '<email>'
+EMAIL_HOST_PASSWORD = '<raw password | encrypted password>' #https://stackoverflow.com/questions/42030080/encypting-smtp-server-password-in-django-settings
+DEFAULT_FROM_EMAIL = '<email>'
