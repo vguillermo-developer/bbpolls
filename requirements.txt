@@ -1,0 +1,7 @@
+Django==1.11.2
+django-bootstrap3
+django-multi-email-field
+requests
+
+## For Windows look in https://github.com/pidydx/libmagicwin64
+python-magic
