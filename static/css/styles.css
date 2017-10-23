@@ -1,0 +1,500 @@
+/*@brand-primary: #428bca;
+@brand-success: #5cb85c;
+@brand-info:    #5bc0de;
+@brand-warning: #f0ad4e;
+@brand-danger:  #d9534f;
+*/
+
+body {
+	background-color:whitesmoke;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+select,
+textarea {
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+
+.login-content{
+	margin-top: 130px;
+}
+
+
+.glyphicon{
+	color:white;
+}
+
+.navbar {
+	margin-bottom:0px;
+}
+
+.btn-logout{
+	padding: 15px;
+	border-radius:4px;
+}
+
+.btn-logout span{
+	color:#777;
+}
+
+.btn-logout:hover span{
+	color:white;
+}
+
+.btn-logout:hover{
+	background-color:#428bca;
+}
+
+.page-header {
+	border: 0px;
+	background-color:#101010;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	position: fixed;
+	top:0px;
+	width:100%;
+	padding-bottom:0px;
+	overflow:hidden;
+	z-index:999;
+}
+
+.header-title h1{
+	color: #3984de;
+	line-height: 1em;
+	font-family: Impact, Charcoal, sans-serif;
+	font-weight:bolder;
+	text-shadow:0px 0px 0 rgb(30,105,195),1px 0px 0 rgb(11,86,176),2px 0px 0 rgb(-7,68,158),
+	3px 0px 0 rgb(-26,49,139),4px 0px 0 rgb(-44,31,121),5px 0px 0 rgb(-63,12,102),
+	6px 0px 0 rgb(-81,-6,84),7px 0px 6px rgba(0,0,0,0.8),7px 0px 1px rgba(0,0,0,0.5),
+	0px 0px 6px rgba(0,0,0,.2);
+
+}
+
+
+
+
+.navbar-inverse .navbar-nav li a {
+	padding: 15px;
+	border-radius:4px;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover,.navbar-inverse .navbar-nav>li>a:focus {
+	background-color:#428bca;
+}
+
+.footer{
+	background-color: #333333;
+	color: white;
+	padding: 10px 0px;
+	bottom:0px;
+	width: 100%;
+	overflow:hidden;
+	margin-top: 150px;
+}
+
+.tech-credits img{
+	width: 80px;
+	background-color:white;
+	margin: 3px;
+	float: right;
+	clear: both;
+
+}
+
+.author-credits img{
+	width: 80px;
+	background-color:white;
+	margin: 3px;
+	float: left;
+	clear: both;
+}
+
+.page-content-body {
+	background-color:white;
+	margin-top: 130px;
+	margin-bottom: 10px;
+	padding: 30px;
+	border-radius: 4px;
+	min-height: 730px;
+}
+
+.page-content-body legend:nth-child(n+2) {
+	margin-top: 30px;
+}
+
+.content{
+	position:absolute;
+	width: 100%;
+	top: 120px;
+	overflow: auto;
+}
+
+.choice-form{
+	border: 1px solid black;
+	border-radius: 4px;
+	margin: 10px;
+	padding: 10px;
+}
+
+.question-form{
+	border: 1px solid black;
+	border-radius: 4px;
+	margin: 10px;
+	padding: 10px;
+}
+
+.poll-action-btn:hover.btn-primary, .poll-action-btn:hover.btn-primary .glyphicon{
+	background-color: white;
+	color:#428bca;
+	background-position: 0px 30px;
+}
+
+.poll-action-btn:hover.btn-danger, .poll-action-btn:hover.btn-danger .glyphicon{
+	background-color: white;
+	color:#c12e2a;
+	background-position: 0px 30px;
+}
+
+.poll-action-btn:hover.btn-warning, .poll-action-btn:hover.btn-warning .glyphicon{
+	background-color: white;
+	color:#eb9316;
+	background-position: 0px 30px;
+}
+
+.poll-action-btn:hover.btn-success, .poll-action-btn:hover.btn-success .glyphicon{
+	background-color: white;
+	color:#398439;
+	background-position: 0px 30px;
+}
+
+.manage-question-choice-panel .control-group {
+	float: left;
+	display: inline;
+}
+
+.control-group {
+	margin: 15px
+}
+
+.choice-field-container {
+	display: inline-block;
+}
+
+
+.manage-question-choice-panel .choice-field-container:nth-child(1) {
+	width: 75%;
+}
+
+.manage-question-choice-panel .choice-field-container:nth-child(2) {
+	width: 15%;
+}
+
+.manage-question-choice-panel .control-group:nth-of-type(1){
+	width:95%
+}
+
+.manage-only .choice-field-container:nth-last-of-type(1){
+	position:relative;
+	top: -4em;
+	color: white;
+	float:right;
+}
+
+.manage-form {
+	padding: 20px;
+}
+
+.survey{
+	margin: 130px auto;
+}
+
+.survey-question {
+	background-color:white;
+	padding: 30px;
+	border-radius: 4px;
+	margin: 10px auto;
+}
+
+
+.form-signin {
+	padding: 19px 29px 29px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+   	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+	margin-bottom: 10px;
+}
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+	font-size: 16px;
+	height: auto;
+	margin-bottom: 15px;
+	padding: 7px 9px;
+}
+
+
+.alert-error {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+/*
+.input-choice input{
+	float: left;
+}
+
+.input-choice input:nth-last-child(1){
+	width: 90%;
+
+}
+
+.input-choice input:nth-child(1){
+	margin: 2px 2px 2px auto;
+}*/
+.alert {
+	text-align: center;
+	opacity: 0.95;
+	width:auto;
+	max-width: 340px;
+}
+
+.alert:hover{
+	opacity: 1;
+}
+
+.alert span[data-notify='message']{
+	padding: 0px 10px;
+}
+
+
+.alert-danger .glyphicon {
+	color: rgb(169, 68, 66);
+}
+
+.alert-success .glyphicon {
+	color:#3c763d;
+}
+
+.alert-info .glyphicon {
+	color:#31708f;
+}
+
+.table-polls  tr td:nth-child(2){
+	width: 17%;
+}
+
+.table-polls  tr td:nth-child(3){
+	max-width: 260px;
+}
+
+.table-polls  tr td:nth-child(4){
+	max-width: 260px;
+}
+
+.table-polls  tr td:nth-child(5){
+	width: 55%;
+}
+
+.question-stats {
+	background-color:white;
+	padding: 30px;
+	border-radius: 4px;
+	margin: 10px auto;
+}
+
+.poll-stats {
+	background-color:white;
+	padding: 30px;
+	border-radius: 4px;
+	margin: 10px auto;
+	margin-top: 130px;
+}
+
+.choices-stats {
+	border: solid 1px whitesmoke;
+	border-radius: 4px;
+	margin: 5px;
+	padding: 15px
+}
+
+.choices-axis{
+	border-right: solid 2px black;
+	padding-right: 0px;
+}
+
+.choice-axis-value {
+	margin: 4px 0px;
+}
+
+.choice-axis-value label{
+	margin: 0px;
+}
+
+.choices-graph {
+	padding-left: 0px;
+}
+
+.choice-graph-bar {
+	/* background-color: #5bc0de; info */
+	/* background-color: #428bca; primary */
+	background-color: #5bc0de;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 15px;
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 0px;
+	height: 24px;
+	margin: 1px 0px;
+	padding: 1px;
+	min-width: 5%;
+}
+
+.choice-graph-value {
+	color:white;
+	margin: 2px 2px 2px 0px;
+}
+
+.view-verbatim-panel {
+	overflow-wrap: break-word;
+}
+
+.table-mm-src {
+	margin: 15px 0px;
+}
+
+.table-mm-src img{
+	width: 25px;
+	height: 25px;
+}
+
+.table-mm-src > tbody > tr > th, .table-mm-src > tbody > tr > td{
+	vertical-align: middle;
+	text-align: center;
+}
+
+.table-mm-src tr:nth-child(1) th:nth-child(4) {
+	padding:0px;
+}
+
+.table-mm-src tr td:nth-last-child(1) {
+	border:0px;
+}
+
+.table-mm-src .glyphicon-ok{
+	color:#3c763d;
+}
+
+.table-mm-src .glyphicon-remove{
+	color:#a94442;
+}
+
+.question-mmsrc {
+	text-align: center;
+}
+
+.question-mmsrc iframe{
+	resize: both;
+	height: 450px;
+	max-height: 600px;
+	width:600px;
+	max-width: 100%;
+}
+
+.question-mmsrc img {
+	max-height: 350px;
+}
+
+.question-mmsrc video {
+	width: 600px;
+	height: auto;
+	max-height: 600px;
+}
+
+.question-order-panel{
+	height: 100px;
+	padding-left: 0;
+	margin-left: -1.25%;
+}
+
+.question-order-panel button{
+	height: 50%
+}
+
+.multimedia-content-info {
+	margin-top:3%;
+}
+
+.glpyhicon-input-help {
+	color:#333;
+	float:right;
+}
+
+.tooltip-inner {
+    width: 300px;
+    max-width: 300px;
+}
+
+.glpyhicon-inline-input-help {
+	color:#333;
+	display:inline;
+	float:right;
+}
+
+.poll-form>.glpyhicon-input-help:nth-child(n+2){
+	margin-top: 1%;
+}
+
+#create_poll .glpyhicon-input-help {
+	margin-top: 1%;
+}
+
+.remove-panel-style{
+	margin:0;
+	border:0;
+	border-radius: 0;
+	box-shadow: 0 0 0;
+	-webkit-box-shadow: 0 0 0;
+	background-color: transparent;
+}
+
+.btn-toggle-show:hover{
+	cursor: hand;
+}
+
+.send-poll-form textarea {
+	width:100%;
+	height: 200px;
+	max-height:300px;
+}
+
+html input[disabled],
+.disabled {
+	cursor: not-allowed;
+	background-color: whitesmoke;
+}
